@@ -4,10 +4,6 @@ import javax.sql.RowSet;
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Map;
 
 /**
  * Clase encargada de generar el acceso y uso de la base de datps
@@ -81,6 +77,11 @@ public class Manager{
         return esDesconectado;
     }
 
+    /**
+     * Ejecuta un select utilizando CachedRowSet
+     * @param sql
+     * @return devuelve un cachedRowSet
+     */
     public CachedRowSet ejecutarSelect(String sql){
 
         CachedRowSet resultado = null;
@@ -92,7 +93,6 @@ public class Manager{
             resultSet = statement.executeQuery(sql);
             resultado = RowSetProvider.newFactory().createCachedRowSet();
             resultado.populate(resultSet);
-
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -108,6 +108,23 @@ public class Manager{
         return resultado;
     }
 
+    public void ejecutarUpdate(String sql){
 
+        System.out.println(conectarBaseDatos());
 
+        try {
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        desconectarBaseDatos();
+
+    }
 }
